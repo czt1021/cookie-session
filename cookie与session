@@ -17,6 +17,8 @@ Session将所有的数据都放在服务器端，用户浏览器的Cookie中只�
 但存储在服务器也有一定的弊端，就是会占用服务器的资源，
 但现在服务器已经发展至今，存储一些session信息还是绰绰有余的。
 
+Session在服务器存储的地点可以设置，分别有：数据库、缓存、文件、cookie。
+
 （1）获取
 # 获取Session中数据
 request.session['k1']
@@ -46,7 +48,6 @@ cookie和session的区别
 Cookie是保存在用户浏览器端的键值对，Session是保存在服务器端的键值对；
 Cookie做用户验证的时，敏感信息不适合放在Cookie中，
 别人可以分析存放在本地的Cookie并进行Cookie欺骗，考虑到安全应当使用Session；
-用户验证时两者要结合使用，Session可保存到文件，内存，数据库任意地方
 为了区分不同的客户端，服务器会在浏览器中发送一个对应的sessionid保存到cookies中，
 下次浏览器请求服务器的时候会将sessionid一并发送给服务器。所以session机制依赖于cookie机制。
 因此，现代网站设计通常将Cookie用来保存一些不重要的内容，

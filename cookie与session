@@ -1,0 +1,54 @@
+cookie和session
+cookie:
+在网站中，http请求是无状态的。
+也就是说即使第一次和服务器连接后并且登录成功后，第二次请求服务器依然不能知道当前请求是哪个用户。
+cookie的出现就是为了解决这个问题，
+第一次登录后服务器返回一些数据（cookie）给浏览器，然后浏览器保存在本地，
+当该用户发送第二次请求的时候，就会把上次请求存储的cookie数据自动的携带给服务器，
+服务器通过浏览器携带的数据就能判断当前是哪个用户了。
+cookie存储的数据量有限，不同的浏览器有不同的存储大小，但一般不超过4kb。
+因此使用cookie只能存储一些小量的数据。
+
+session：
+session和cookie的作用有点类似，都是为了存储用户相关的信息。
+不同的是，cookie是存储在本地浏览器，
+Session将所有的数据都放在服务器端，用户浏览器的Cookie中只会保存一个非明文的识别信息，比如哈希值
+存储在服务器的数据会更加安全，不容易被窃取。
+但存储在服务器也有一定的弊端，就是会占用服务器的资源，
+但现在服务器已经发展至今，存储一些session信息还是绰绰有余的。
+
+（1）获取
+# 获取Session中数据
+request.session['k1']
+request.session.get('k1', None)
+
+（2）生成
+# 生成Session中数据
+request.session['k1'] = 123
+request.session.setdefault('k1', 123)  # 存在则不设置
+
+（3）删除
+# 删除Session中某条数据
+del request.session['k1']
+
+# 删除当前用户的所有Session数据
+request.session.delete("session_key")
+request.session.clear()         #注销时可用
+
+（4）超时时间
+# 设置超时时间
+request.session.set_expiry(value)       #默认超时时间为两周
+*如果value是个整数，session会在些秒数后失效。
+*如果value是None, session会依赖全局session失效策略。
+
+cookie和session的区别
+
+Cookie是保存在用户浏览器端的键值对，Session是保存在服务器端的键值对；
+Cookie做用户验证的时，敏感信息不适合放在Cookie中，
+别人可以分析存放在本地的Cookie并进行Cookie欺骗，考虑到安全应当使用Session；
+用户验证时两者要结合使用，Session可保存到文件，内存，数据库任意地方
+为了区分不同的客户端，服务器会在浏览器中发送一个对应的sessionid保存到cookies中，
+下次浏览器请求服务器的时候会将sessionid一并发送给服务器。所以session机制依赖于cookie机制。
+因此，现代网站设计通常将Cookie用来保存一些不重要的内容，
+实际的用户数据和状态还是以Session会话的方式保存在服务器端。
+
